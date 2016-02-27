@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ShogunLib, Version=0.1.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ShogunLib.dll.0.1.3\lib\net45\ShogunLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
@@ -49,11 +53,14 @@
     <Compile Include="FileSystem\FileStreamService.cs" />
     <Compile Include="FileSystem\FileSystemEntries.cs" />
     <Compile Include="FileSystem\FileSystemEntry.cs" />
+    <Compile Include="FileSystem\FileSystemService.cs" />
     <Compile Include="FileSystem\IFileStreamService.cs" />
     <Compile Include="FileSystem\IFileSystemService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
