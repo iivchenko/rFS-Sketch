@@ -46,6 +46,7 @@
     <Compile Include="Application\IApplicationEngineFactory.cs" />
     <Compile Include="FileSystem\DirectoryEntry.cs" />
     <Compile Include="FileSystem\FileEntry.cs" />
+    <Compile Include="FileSystem\FileStreamService.cs" />
     <Compile Include="FileSystem\FileSystemEntries.cs" />
     <Compile Include="FileSystem\FileSystemEntry.cs" />
     <Compile Include="FileSystem\IFileStreamService.cs" />
