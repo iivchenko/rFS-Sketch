@@ -1,0 +1,289 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="FileStreamService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsp:Policy wsu:Id="NetTcpBinding_IFileStreamService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1">
+        </msb:BinaryEncoding>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <msf:WindowsTransportSecurity xmlns:msf="http://schemas.microsoft.com/ws/2006/05/framing/policy">
+                  <msf:ProtectionLevel>EncryptAndSign</msf:ProtectionLevel>
+                </msf:WindowsTransportSecurity>
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256>
+                </sp:Basic256>
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict>
+                </sp:Strict>
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+        <wsaw:UsingAddressing>
+        </wsaw:UsingAddressing>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import namespace="http://tempuri.org/" />
+      <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/System.IO" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IFileStreamService_get_CanRead_InputMessage">
+    <wsdl:part name="parameters" element="tns:get_CanRead" />
+  </wsdl:message>
+  <wsdl:message name="IFileStreamService_get_CanRead_OutputMessage">
+    <wsdl:part name="parameters" element="tns:get_CanReadResponse" />
+  </wsdl:message>
+  <wsdl:message name="IFileStreamService_get_CanSeek_InputMessage">
+    <wsdl:part name="parameters" element="tns:get_CanSeek" />
+  </wsdl:message>
+  <wsdl:message name="IFileStreamService_get_CanSeek_OutputMessage">
+    <wsdl:part name="parameters" element="tns:get_CanSeekResponse" />
+  </wsdl:message>
+  <wsdl:message name="IFileStreamService_get_CanWrite_InputMessage">
+    <wsdl:part name="parameters" element="tns:get_CanWrite" />
+  </wsdl:message>
+  <wsdl:message name="IFileStreamService_get_CanWrite_OutputMessage">
+    <wsdl:part name="parameters" element="tns:get_CanWriteResponse" />
+  </wsdl:message>
+  <wsdl:message name="IFileStreamService_get_Length_InputMessage">
+    <wsdl:part name="parameters" element="tns:get_Length" />
+  </wsdl:message>
+  <wsdl:message name="IFileStreamService_get_Length_OutputMessage">
+    <wsdl:part name="parameters" element="tns:get_LengthResponse" />
+  </wsdl:message>
+  <wsdl:message name="IFileStreamService_get_Position_InputMessage">
+    <wsdl:part name="parameters" element="tns:get_Position" />
+  </wsdl:message>
+  <wsdl:message name="IFileStreamService_get_Position_OutputMessage">
+    <wsdl:part name="parameters" element="tns:get_PositionResponse" />
+  </wsdl:message>
+  <wsdl:message name="IFileStreamService_set_Position_InputMessage">
+    <wsdl:part name="parameters" element="tns:set_Position" />
+  </wsdl:message>
+  <wsdl:message name="IFileStreamService_set_Position_OutputMessage">
+    <wsdl:part name="parameters" element="tns:set_PositionResponse" />
+  </wsdl:message>
+  <wsdl:message name="IFileStreamService_Initialize_InputMessage">
+    <wsdl:part name="parameters" element="tns:Initialize" />
+  </wsdl:message>
+  <wsdl:message name="IFileStreamService_Initialize_OutputMessage">
+    <wsdl:part name="parameters" element="tns:InitializeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IFileStreamService_Flush_InputMessage">
+    <wsdl:part name="parameters" element="tns:Flush" />
+  </wsdl:message>
+  <wsdl:message name="IFileStreamService_Flush_OutputMessage">
+    <wsdl:part name="parameters" element="tns:FlushResponse" />
+  </wsdl:message>
+  <wsdl:message name="IFileStreamService_Read_InputMessage">
+    <wsdl:part name="parameters" element="tns:Read" />
+  </wsdl:message>
+  <wsdl:message name="IFileStreamService_Read_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ReadResponse" />
+  </wsdl:message>
+  <wsdl:message name="IFileStreamService_Seek_InputMessage">
+    <wsdl:part name="parameters" element="tns:Seek" />
+  </wsdl:message>
+  <wsdl:message name="IFileStreamService_Seek_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SeekResponse" />
+  </wsdl:message>
+  <wsdl:message name="IFileStreamService_SetLength_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetLength" />
+  </wsdl:message>
+  <wsdl:message name="IFileStreamService_SetLength_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetLengthResponse" />
+  </wsdl:message>
+  <wsdl:message name="IFileStreamService_Write_InputMessage">
+    <wsdl:part name="parameters" element="tns:Write" />
+  </wsdl:message>
+  <wsdl:message name="IFileStreamService_Write_OutputMessage">
+    <wsdl:part name="parameters" element="tns:WriteResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IFileStreamService">
+    <wsdl:operation name="get_CanRead">
+      <wsdl:input wsaw:Action="http://tempuri.org/IFileStreamService/get_CanRead" message="tns:IFileStreamService_get_CanRead_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IFileStreamService/get_CanReadResponse" message="tns:IFileStreamService_get_CanRead_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="get_CanSeek">
+      <wsdl:input wsaw:Action="http://tempuri.org/IFileStreamService/get_CanSeek" message="tns:IFileStreamService_get_CanSeek_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IFileStreamService/get_CanSeekResponse" message="tns:IFileStreamService_get_CanSeek_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="get_CanWrite">
+      <wsdl:input wsaw:Action="http://tempuri.org/IFileStreamService/get_CanWrite" message="tns:IFileStreamService_get_CanWrite_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IFileStreamService/get_CanWriteResponse" message="tns:IFileStreamService_get_CanWrite_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="get_Length">
+      <wsdl:input wsaw:Action="http://tempuri.org/IFileStreamService/get_Length" message="tns:IFileStreamService_get_Length_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IFileStreamService/get_LengthResponse" message="tns:IFileStreamService_get_Length_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="get_Position">
+      <wsdl:input wsaw:Action="http://tempuri.org/IFileStreamService/get_Position" message="tns:IFileStreamService_get_Position_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IFileStreamService/get_PositionResponse" message="tns:IFileStreamService_get_Position_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="set_Position">
+      <wsdl:input wsaw:Action="http://tempuri.org/IFileStreamService/set_Position" message="tns:IFileStreamService_set_Position_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IFileStreamService/set_PositionResponse" message="tns:IFileStreamService_set_Position_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Initialize">
+      <wsdl:input wsaw:Action="http://tempuri.org/IFileStreamService/Initialize" message="tns:IFileStreamService_Initialize_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IFileStreamService/InitializeResponse" message="tns:IFileStreamService_Initialize_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Flush">
+      <wsdl:input wsaw:Action="http://tempuri.org/IFileStreamService/Flush" message="tns:IFileStreamService_Flush_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IFileStreamService/FlushResponse" message="tns:IFileStreamService_Flush_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Read">
+      <wsdl:input wsaw:Action="http://tempuri.org/IFileStreamService/Read" message="tns:IFileStreamService_Read_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IFileStreamService/ReadResponse" message="tns:IFileStreamService_Read_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Seek">
+      <wsdl:input wsaw:Action="http://tempuri.org/IFileStreamService/Seek" message="tns:IFileStreamService_Seek_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IFileStreamService/SeekResponse" message="tns:IFileStreamService_Seek_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SetLength">
+      <wsdl:input wsaw:Action="http://tempuri.org/IFileStreamService/SetLength" message="tns:IFileStreamService_SetLength_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IFileStreamService/SetLengthResponse" message="tns:IFileStreamService_SetLength_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Write">
+      <wsdl:input wsaw:Action="http://tempuri.org/IFileStreamService/Write" message="tns:IFileStreamService_Write_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IFileStreamService/WriteResponse" message="tns:IFileStreamService_Write_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="NetTcpBinding_IFileStreamService" type="tns:IFileStreamService">
+    <wsp:PolicyReference URI="#NetTcpBinding_IFileStreamService_policy">
+    </wsp:PolicyReference>
+    <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="get_CanRead">
+      <soap12:operation soapAction="http://tempuri.org/IFileStreamService/get_CanRead" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="get_CanSeek">
+      <soap12:operation soapAction="http://tempuri.org/IFileStreamService/get_CanSeek" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="get_CanWrite">
+      <soap12:operation soapAction="http://tempuri.org/IFileStreamService/get_CanWrite" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="get_Length">
+      <soap12:operation soapAction="http://tempuri.org/IFileStreamService/get_Length" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="get_Position">
+      <soap12:operation soapAction="http://tempuri.org/IFileStreamService/get_Position" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="set_Position">
+      <soap12:operation soapAction="http://tempuri.org/IFileStreamService/set_Position" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Initialize">
+      <soap12:operation soapAction="http://tempuri.org/IFileStreamService/Initialize" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Flush">
+      <soap12:operation soapAction="http://tempuri.org/IFileStreamService/Flush" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Read">
+      <soap12:operation soapAction="http://tempuri.org/IFileStreamService/Read" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Seek">
+      <soap12:operation soapAction="http://tempuri.org/IFileStreamService/Seek" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetLength">
+      <soap12:operation soapAction="http://tempuri.org/IFileStreamService/SetLength" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Write">
+      <soap12:operation soapAction="http://tempuri.org/IFileStreamService/Write" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="FileStreamService">
+    <wsdl:port name="NetTcpBinding_IFileStreamService" binding="tns:NetTcpBinding_IFileStreamService">
+      <soap12:address location="net.tcp://localhost:8000/rFS/FileStreamService" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>net.tcp://localhost:8000/rFS/FileStreamService</wsa10:Address>
+        <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
+          <Upn>PROD\iivchenk</Upn>
+        </Identity>
+      </wsa10:EndpointReference>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
