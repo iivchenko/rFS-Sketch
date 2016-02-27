@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="Client.WPF.Views.AgentView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <DockPanel>
+            <ComboBox DockPanel.Dock="Top" Margin="5,5,5,5" ItemsSource="{Binding Agents}" SelectedItem="{Binding ActiveAgent}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <WrapPanel>
+                            <TextBlock Text="{Binding DisplayName}"/>
+                        </WrapPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <ListBox Margin="5,5,5,5" ItemsSource="{Binding FileSystemEntires}" SelectedItem="{Binding SelectedEntry}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                        <EventSetter Event="MouseDoubleClick" Handler="EventSetter_OnHandler"/>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+
+            </ListBox>
+        </DockPanel>
+    </Grid>
+</UserControl>
