@@ -64,6 +64,9 @@
     <Compile Include="FileSystem\IFileStreamService.cs" />
     <Compile Include="FileSystem\IFileSystemService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\Entity.cs" />
+    <Compile Include="Repositories\IRepository.cs" />
+    <Compile Include="Repositories\XmlRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
