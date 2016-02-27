@@ -38,6 +38,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -46,8 +47,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Application\ApplicationEngineFactory.cs" />
+    <Compile Include="Application\ConsoleEngine.cs" />
     <Compile Include="Application\IApplicationEngine.cs" />
     <Compile Include="Application\IApplicationEngineFactory.cs" />
+    <Compile Include="Application\Service.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Application\WindowsServiceEngine.cs" />
     <Compile Include="FileSystem\DirectoryEntry.cs" />
     <Compile Include="FileSystem\FileEntry.cs" />
     <Compile Include="FileSystem\FileStreamService.cs" />
