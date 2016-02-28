@@ -27,8 +27,8 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <views:AgentView Grid.Column="0" DataContext="{Binding Left}"/>
-            <views:AgentView Grid.Column="1" DataContext="{Binding Right}"/>
+            <views:AgentView Grid.Column="0" Copy="AgentView_OnCopy" DataContext="{Binding Left}"  Orientation="Left" />
+            <views:AgentView Grid.Column="1" Copy="AgentView_OnCopy" DataContext="{Binding Right}" Orientation="Right" />
 
         </Grid>
 

@@ -16,7 +16,7 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
-            <ListBox Margin="5,5,5,5" ItemsSource="{Binding FileSystemEntires}" SelectedItem="{Binding SelectedEntry}">
+            <ListBox Margin="5,5,5,5" KeyDown="UIElement_OnKeyDown" ItemsSource="{Binding FileSystemEntires}" SelectedItem="{Binding SelectedEntry}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Name}"/>

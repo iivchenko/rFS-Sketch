@@ -38,6 +38,10 @@
     <StartupObject>Client.WPF.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ShogunLib, Version=0.1.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ShogunLib.dll.0.1.3\lib\net45\ShogunLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Runtime.Serialization" />
@@ -71,12 +75,16 @@
     </Compile>
     <Compile Include="ViewModels\AgentsViewModel.cs" />
     <Compile Include="ViewModels\AgentViewModel.cs" />
+    <Compile Include="ViewModels\CopyFileViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Views\AgentsView.xaml.cs">
       <DependentUpon>AgentsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\AgentView.xaml.cs">
       <DependentUpon>AgentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CopyFileView.xaml.cs">
+      <DependentUpon>CopyFileView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
@@ -86,6 +94,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AgentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CopyFileView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -112,6 +124,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
