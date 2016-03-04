@@ -37,6 +37,9 @@
   <PropertyGroup>
     <StartupObject>Client.WPF.Program</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ShogunLib, Version=0.1.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ShogunLib.dll.0.1.3\lib\net45\ShogunLib.dll</HintPath>
@@ -194,6 +197,9 @@
       <Project>{a715728a-41b1-4742-9d60-5f3458e34a7a}</Project>
       <Name>Sketch</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
