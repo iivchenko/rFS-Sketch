@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AgentEntity.cs" />
+    <Compile Include="AgentsStorage.cs" />
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Service References\_FileStreamService\Reference.cs">
