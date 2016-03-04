@@ -11,23 +11,29 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Client.WPF.Common;
-using Sketch.Repositories;
+using ShogunLib.Events;
 
 namespace Client.WPF.ViewModels
 {
-    public sealed class AgentsViewModel : INotifyPropertyChanged
+    public sealed class AgentsViewModel : INotifyPropertyChanged, IDisposable
     {
         private string _newAgentName;
         private string _newAgentHost;
 
         private AgentEntity _selectedAgent;
 
-        private readonly IRepository<AgentEntity> _repository;
+        private readonly AgentsStorage _agentsStorage;
 
-        public AgentsViewModel(IRepository<AgentEntity> repository)
+        public AgentsViewModel(AgentsStorage agentsStorage)
         {
-            _repository = repository;
+            _agentsStorage = agentsStorage;
+
+            _agentsStorage.AgentAdded += Update;
+            _agentsStorage.AgentRemoved += Update;
+            _agentsStorage.AgentUpdated += Update;
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public string NewAgentName
         {
@@ -76,7 +82,7 @@ namespace Client.WPF.ViewModels
 
         public IEnumerable<AgentEntity> Agents
         {
-            get { return _repository.ToList(); }
+            get { return _agentsStorage.ToList(); }
         }
 
         public ICommand Add
@@ -87,7 +93,7 @@ namespace Client.WPF.ViewModels
                     () =>
                     {
                         var found =
-                            _repository
+                            _agentsStorage
                                 .Find(
                                     x => x.DisplayName.Equals(_newAgentName, StringComparison.OrdinalIgnoreCase) ||
                                          x.Host.Equals(_newAgentHost, StringComparison.OrdinalIgnoreCase))
@@ -98,9 +104,8 @@ namespace Client.WPF.ViewModels
                             throw new InvalidOperationException("The agent with the same name of host is presedt!");
                         }
 
-                        _repository.Add(new AgentEntity {Host = _newAgentHost, DisplayName = _newAgentName});
-
-                        OnPropertyChanged("Agents");
+                        _agentsStorage.Add(new AgentEntity {Host = _newAgentHost, DisplayName = _newAgentName});
+                        
                         NewAgentHost = NewAgentName = string.Empty;
 
                     },
@@ -115,15 +120,23 @@ namespace Client.WPF.ViewModels
                 return new RelayCommand(
                     () =>
                     {
-                        _repository.Remove(_selectedAgent);
-
-                        OnPropertyChanged("Agents");
+                        _agentsStorage.Remove(_selectedAgent);
                     },
                     () => _selectedAgent != null);
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public void Dispose()
+        {
+            _agentsStorage.AgentAdded -= Update;
+            _agentsStorage.AgentRemoved -= Update;
+            _agentsStorage.AgentUpdated -= Update;
+        }
+
+        private void Update(object sender, SimpleEventArgs<AgentEntity> args)
+        {
+            OnPropertyChanged("Agents");
+        }
 
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {

@@ -27,7 +27,9 @@ namespace Client.WPF.Views
 
         private void MenuAgents_OnClick(object sender, RoutedEventArgs e)
         {
-            var window = new AgentsView(new AgentsViewModel(new XmlRepository<AgentEntity>("Agents.xml")))
+            var viewModel = (MainViewModel)DataContext;
+
+            var window = new AgentsView(viewModel.Agets)
             {
                 Owner = this
             };

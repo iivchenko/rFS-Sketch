@@ -19,7 +19,7 @@ namespace Client.WPF
         {
             var app = new Application();
 
-            app.Run(new MainView(new MainViewModel(new XmlRepository<AgentEntity>("Agents.xml"))));
+            app.Run(new MainView(new MainViewModel(new AgentsStorage(new XmlRepository<AgentEntity>("Agents.xml")))));
         }
     }
 }

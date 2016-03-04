@@ -10,13 +10,17 @@ namespace Client.WPF.ViewModels
 {
     public sealed class MainViewModel
     {
-        public MainViewModel(IRepository<AgentEntity> repository)
+        public MainViewModel(AgentsStorage agentsStorage)
         {
-            Agets = new AgentsViewModel(repository);
+            Agets = new AgentsViewModel(agentsStorage);
 
-            Left = new AgentViewModel(repository);
-            Right = new AgentViewModel(repository);
+            Left = new AgentViewModel(agentsStorage);
+            Right = new AgentViewModel(agentsStorage);
+
+            AgentsStorage = agentsStorage;
         }
+
+        public AgentsStorage AgentsStorage { get; private set; }
 
         public AgentsViewModel Agets { get; private set; }
 

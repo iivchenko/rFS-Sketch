@@ -14,32 +14,38 @@ using System.ServiceModel;
 using System.Windows.Input;
 using Client.WPF.Common;
 using Client.WPF._FileSystemService;
+using ShogunLib.Events;
 using Sketch.FileSystem;
-using Sketch.Repositories;
 using IFileSystemService = Client.WPF._FileSystemService.IFileSystemService;
 
 namespace Client.WPF.ViewModels
 {
     // TODO: This view model looks like shit - Refactor =)
-    public sealed class AgentViewModel : INotifyPropertyChanged
+    public sealed class AgentViewModel : INotifyPropertyChanged, IDisposable
     {
         private AgentEntity _activeAgent;
         private FileSystemEntry _selectedEntry;
         private FileSystemEntry _parentEntry;
         private DirectoryEntry _activeDirectory;
 
-        private readonly IRepository<AgentEntity> _repository;
+        private readonly AgentsStorage _agentsStorage;
         private readonly IDictionary<string, IFileSystemService> _agents;
         
-        public AgentViewModel(IRepository<AgentEntity> repository)
+        public AgentViewModel(AgentsStorage agentsStorage)
         {
-            _repository = repository;
+            _agentsStorage = agentsStorage;
             _agents = new Dictionary<string, IFileSystemService>();
+
+            _agentsStorage.AgentAdded += Update;
+            _agentsStorage.AgentRemoved += Update;
+            _agentsStorage.AgentUpdated += Update;
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public IEnumerable<AgentEntity> Agents
         {
-            get { return _repository.ToList(); }
+            get { return _agentsStorage.ToList(); }
         }
 
         public IEnumerable<FileSystemEntry> FileSystemEntires { get; private set; }
@@ -146,7 +152,12 @@ namespace Client.WPF.ViewModels
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public void Dispose()
+        {
+            _agentsStorage.AgentAdded -= Update;
+            _agentsStorage.AgentRemoved -= Update;
+            _agentsStorage.AgentUpdated -= Update;
+        }
 
         private void Connect()
         {
@@ -171,6 +182,11 @@ namespace Client.WPF.ViewModels
             var endpoint = new EndpointAddress(new Uri($"net.tcp://{host}:8000/rFS/FileSystemService"));
 
             return new FileSystemServiceClient(binding, endpoint);
+        }
+
+        private void Update(object sender, SimpleEventArgs<AgentEntity> args)
+        {
+            OnPropertyChanged("Agents");
         }
 
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
