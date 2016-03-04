@@ -105,7 +105,7 @@ namespace Client.WPF.ViewModels
 
         private static FileStreamServiceClient CreateClient(string host)
         {
-            var binding = new NetTcpBinding
+            var binding = new NetTcpBinding (SecurityMode.None)
             {
                 MaxReceivedMessageSize = 15728640
             };
