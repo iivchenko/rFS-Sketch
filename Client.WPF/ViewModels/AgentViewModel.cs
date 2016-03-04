@@ -117,6 +117,7 @@ namespace Client.WPF.ViewModels
                     {
                         if (SelectedEntry is DirectoryEntry)
                         {
+                            // TODO: Fix the problem when we don't use connection for a long time.
                             var list = _agents[_activeAgent.DisplayName].EnumerateEntries(SelectedEntry.FullName).ToList();
 
                             if (SelectedEntry.Parent != null && SelectedEntry.FullName != "\\")
