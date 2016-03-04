@@ -178,7 +178,11 @@ namespace Client.WPF.ViewModels
 
         private FileSystemServiceClient CreateClient(string host)
         {
-            var binding = new NetTcpBinding(SecurityMode.None);
+            var binding = new NetTcpBinding(SecurityMode.None)
+            {
+                MaxReceivedMessageSize = 1048576
+            };
+
             var endpoint = new EndpointAddress(new Uri($"net.tcp://{host}:8000/rFS/FileSystemService"));
 
             return new FileSystemServiceClient(binding, endpoint);
