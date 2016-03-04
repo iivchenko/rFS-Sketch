@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
+  <?define ProductName="rFS-Sketch" ?>
+  <?define ProductVersion="1.0.0.0" ?>
+  <?define ProductCode="B7BC7C6F-9A4E-4973-BE84-ECA8E3427C97"?>
+  <?define UpgradeCode="06A81104-1E30-463D-87E1-E8A79B4C682A"?>
+  <?define Manufacturer="Shogun"?>
+
+  <?define ServerName="fsAgent"?>
+  <?define ClientName="fsClient"?>
+  
+  <Product 
+    Id="$(var.ProductCode)" 
+    Name="$(var.ProductName)" 
+    Language="1033" 
+    Version="$(var.ProductVersion)"
+    Manufacturer="$(var.Manufacturer)" 
+    UpgradeCode="$(var.UpgradeCode)">
+    
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine"/>
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <MediaTemplate EmbedCab="yes"/>
+    
+    <Icon Id="icon.ico" SourceFile="Images\icon.ico"/>
+    <WixVariable Id="WixUIBannerBmp" Value="Images\Top.bmp" />
+    <WixVariable Id="WixUIDialogBmp" Value="Images\Background.bmp" />
+
+    <Property Id="ARPPRODUCTICON" Value="icon.ico" />
+    <Property Id="WIXUI_INSTALLDIR" Value="TARGETDIR"/>
+
+    <UIRef Id="WixUI_Mondo_Modified"/>
+
+		<Feature Id="ServerFeature" 
+             Title="$(var.ServerName)"
+             Description="WCF based Windows service that provides remote access to the File System" 
+             Level="1" 
+             ConfigurableDirectory="SERVERFOLDER">
+			<ComponentRef Id="ServerComponent" />
+		</Feature>
+
+    <Feature Id="ClientFeature" 
+             Title="$(var.ClientName)"
+             Description="WCF Client that enables to make file system navigation on the remote $(var.ServerName)" 
+             Level="1" 
+             ConfigurableDirectory="CLIENTFOLDER">
+      <ComponentRef Id="ClientComponent" />
+      <ComponentRef Id="ClientComponentShortcut"/>
+    </Feature>
+    
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+        <Directory Id="ProductFolder" Name="$(var.ProductName)">
+          <Directory Id="SERVERFOLDER" Name="$(var.ServerName)" />
+          <Directory Id="CLIENTFOLDER" Name="$(var.ClientName)" />
+        </Directory>
+			</Directory>
+      
+      <Directory Id="DesktopFolder" Name="$(var.ProductName)" />
+      
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+
+    <DirectoryRef Id="SERVERFOLDER" FileSource="..\Server\bin\$(var.Configuration)\" DiskId='1'>
+      <Component Id="ServerComponent" Guid="302DA202-D09F-4E8E-A388-D102C9CCCF11">
+        <File Id='fsAgent' Name='fsAgent.exe' KeyPath='yes'/>
+        <File Id='fsAgent.config' Name='fsAgent.exe.config'/>
+        <File Id='ServerSketch' Name='Sketch.dll'/>
+        <File Id='ServerShogunLib' Name='ShogunLib.dll'/>
+      
+        <ServiceInstall
+          Id="ServiceInstaller"
+          Type="ownProcess"
+          Name="$(var.ServerName)"
+          DisplayName="File System Agent"
+          Description="WCF based Windows service that provides remote access to the File System"
+          Start="auto"
+          Account="LocalSystem" 
+          ErrorControl="normal"/>
+        <ServiceControl Id="StartService" Start="install" Stop="both" Remove="uninstall" Name="$(var.ServerName)" Wait="yes" />
+      </Component>
+    </DirectoryRef>
+
+    <DirectoryRef Id="CLIENTFOLDER" FileSource="..\Client.WPF\bin\$(var.Configuration)\" DiskId='1'>
+      <Component Id="ClientComponent" Guid="1B677D95-8015-46B0-8F4F-43E412138AEF" KeyPath="yes">
+        <File Id='Client' Name='Client.WPF.exe'/>
+        <File Id='Client.config' Name='Client.WPF.exe.config'/>
+        <File Id='ClientSketch' Name='Sketch.dll'/>
+        <File Id='ClientShogunLib' Name='ShogunLib.dll'/>
+      </Component>
+    </DirectoryRef>
+
+    <Component Id="ClientComponentShortcut" Guid="29EB41BB-FCFA-4F71-B31A-9B265DA5C05D" Directory="DesktopFolder">
+      <Shortcut 
+        Id="ClientShortcut"
+        Name="$(var.ClientName)"
+        Description="$(var.ProductName)"
+        Target="[CLIENTFOLDER]Client.WPF.exe"
+        WorkingDirectory="CLIENTFOLDER"/>
+      
+      <RemoveFolder Id="DesktopFolder" On="uninstall"/>
+      
+      <RegistryValue 
+        Root="HKCU"
+        Key="Software\$(var.Manufacturer)\$(var.ProductName)\$(var.ClientName)"
+        Name="installed"
+        Type="integer"
+        Value="1"
+        KeyPath="yes"/>
+    </Component>
+    
+	</Fragment>
+
+  <Fragment>
+    <UI Id="WixUI_Mondo_Modified">
+      <TextStyle Id="WixUI_Font_Normal" FaceName="Tahoma" Size="8" />
+      <TextStyle Id="WixUI_Font_Bigger" FaceName="Tahoma" Size="12" />
+      <TextStyle Id="WixUI_Font_Title" FaceName="Tahoma" Size="9" Bold="yes" />
+
+      <Property Id="DefaultUIFont" Value="WixUI_Font_Normal" />
+      <Property Id="WixUI_Mode" Value="Mondo" />
+
+      <DialogRef Id="ErrorDlg" />
+      <DialogRef Id="FatalError" />
+      <DialogRef Id="FilesInUse" />
+      <DialogRef Id="MsiRMFilesInUse" />
+      <DialogRef Id="PrepareDlg" />
+      <DialogRef Id="ProgressDlg" />
+      <DialogRef Id="ResumeDlg" />
+      <DialogRef Id="UserExit" />
+
+      <Publish Dialog="ExitDialog" Control="Finish" Event="EndDialog" Value="Return" Order="999">1</Publish>
+
+      <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="CustomizeDlg">NOT Installed AND NOT PATCH</Publish>
+      <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg">Installed AND PATCH</Publish>
+
+      <Publish Dialog="CustomizeDlg" Control="Back" Event="NewDialog" Value="MaintenanceTypeDlg" Order="1">WixUI_InstallMode = "Change"</Publish>
+      <Publish Dialog="CustomizeDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg" Order="1">1</Publish>
+      <Publish Dialog="CustomizeDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="CustomizeDlg" Order="1">1</Publish>
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="MaintenanceTypeDlg" Order="4">WixUI_InstallMode = "Repair" OR WixUI_InstallMode = "Remove"</Publish>
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg" Order="2">WixUI_InstallMode = "Update"</Publish>
+
+      <Publish Dialog="MaintenanceWelcomeDlg" Control="Next" Event="NewDialog" Value="MaintenanceTypeDlg">1</Publish>
+
+      <Publish Dialog="MaintenanceTypeDlg" Control="ChangeButton" Event="NewDialog" Value="CustomizeDlg">1</Publish>
+      <Publish Dialog="MaintenanceTypeDlg" Control="RepairButton" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+      <Publish Dialog="MaintenanceTypeDlg" Control="RemoveButton" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+      <Publish Dialog="MaintenanceTypeDlg" Control="Back" Event="NewDialog" Value="MaintenanceWelcomeDlg">1</Publish>
+    </UI>
+
+    <UIRef Id="WixUI_Common" />
+  </Fragment>
+</Wix>
