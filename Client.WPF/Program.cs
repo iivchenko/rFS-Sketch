@@ -18,6 +18,11 @@ namespace Client.WPF
         public static void Main(string[] args)
         {
             var app = new Application();
+            app.DispatcherUnhandledException += (sender, eventArgs) =>
+            {
+                eventArgs.Handled = true;
+                MessageBox.Show(eventArgs.Exception.ToString(), "Unhandled ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+            };
 
             app.Run(new MainView(new MainViewModel(new AgentsStorage(new XmlRepository<AgentEntity>("Agents.xml")))));
         }
