@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.ServiceModel;
+using System.ServiceModel.Channels;
 using System.Windows.Input;
 using Client.WPF.Common;
 using Client.WPF._FileSystemService;
@@ -29,13 +30,11 @@ namespace Client.WPF.ViewModels
         private DirectoryEntry _activeDirectory;
 
         private readonly AgentsStorage _agentsStorage;
-        private readonly IDictionary<string, IFileSystemService> _agents;
-        
+        private IFileSystemService _agent;
+
         public AgentViewModel(AgentsStorage agentsStorage)
         {
             _agentsStorage = agentsStorage;
-            _agents = new Dictionary<string, IFileSystemService>();
-
             _agentsStorage.AgentAdded += Update;
             _agentsStorage.AgentRemoved += Update;
             _agentsStorage.AgentUpdated += Update;
@@ -61,6 +60,7 @@ namespace Client.WPF.ViewModels
             {
                 _activeAgent = value;
 
+                // TODO: Refactor somwhere in the future
                 Connect();
 
                 OnPropertyChanged();
@@ -93,7 +93,7 @@ namespace Client.WPF.ViewModels
             set
             {
                 _selectedEntry = value;
-                
+
                 OnPropertyChanged();
             }
         }
@@ -103,13 +103,13 @@ namespace Client.WPF.ViewModels
             get
             {
                 return _activeDirectory;
-                
+
             }
 
             set
             {
                 _activeDirectory = value;
-                
+
                 OnPropertyChanged();
             }
         }
@@ -124,7 +124,13 @@ namespace Client.WPF.ViewModels
                         if (SelectedEntry is DirectoryEntry)
                         {
                             // TODO: Fix the problem when we don't use connection for a long time.
-                            var list = _agents[_activeAgent.DisplayName].EnumerateEntries(SelectedEntry.FullName).ToList();
+
+                            if (_agent == null)
+                            {
+                                Connect();
+                            }
+
+                            var list = _agent.EnumerateEntries(SelectedEntry.FullName).ToList();
 
                             if (SelectedEntry.Parent != null && SelectedEntry.FullName != "\\")
                             {
@@ -161,26 +167,32 @@ namespace Client.WPF.ViewModels
 
         private void Connect()
         {
-            if (!_agents.Keys.Contains(ActiveAgent.DisplayName))
+            if (_agent != null)
             {
-                _agents.Add(ActiveAgent.DisplayName, CreateClient(ActiveAgent.Host));
-
-                FileSystemEntires = _agents[_activeAgent.DisplayName].EnumerateEntries("\\");
-
-                ActiveDirectory = new DirectoryEntry
-                {
-                    Name = "\\",
-                    FullName = "\\",
-                    Parent = null
-                };
+                ((ICommunicationObject)_agent).Close();
             }
+
+            _agent = CreateClient(ActiveAgent.Host);
+
+            ((ICommunicationObject)_agent).Closed += AgentDisconnectHandler;
+            ((ICommunicationObject)_agent).Faulted += AgentReconnectHandler;
+
+            FileSystemEntires = _agent.EnumerateEntries("\\");
+
+            ActiveDirectory = new DirectoryEntry
+            {
+                Name = "\\",
+                FullName = "\\",
+                Parent = null
+            };
         }
 
         private FileSystemServiceClient CreateClient(string host)
         {
             var binding = new NetTcpBinding(SecurityMode.None)
             {
-                MaxReceivedMessageSize = 1048576
+                MaxReceivedMessageSize = 1048576,
+                ReliableSession = new OptionalReliableSession { Enabled = true, InactivityTimeout = TimeSpan.MaxValue }
             };
 
             var endpoint = new EndpointAddress(new Uri($"net.tcp://{host}:8000/rFS/FileSystemService"));
@@ -196,6 +208,25 @@ namespace Client.WPF.ViewModels
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void AgentDisconnectHandler(object sernder, EventArgs args)
+        {
+            ((ICommunicationObject)_agent).Open();
+            ((ICommunicationObject)_agent).Closed -= AgentDisconnectHandler;
+            ((ICommunicationObject)_agent).Faulted -= AgentDisconnectHandler;
+            _agent = null;
+        }
+
+        private void AgentReconnectHandler(object sernder, EventArgs args)
+        {
+            ((ICommunicationObject)_agent).Closed -= AgentDisconnectHandler;
+            ((ICommunicationObject)_agent).Faulted -= AgentDisconnectHandler;
+
+            _agent = CreateClient(ActiveAgent.Host);
+
+            ((ICommunicationObject)_agent).Closed += AgentDisconnectHandler;
+            ((ICommunicationObject)_agent).Faulted += AgentReconnectHandler;
         }
     }
 }
